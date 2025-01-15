@@ -1,0 +1,82 @@
+
+---
+    const HARDSKILLS = {
+        'Lenguajes': [ 'PHP', 'JavaScript', 'CSS3', 'HTML5' ],
+        'Frameworks': [ 'Laravel', 'React', 'Vue.js', 'Astro', 'Bootstrap', 'Tailwind CSS' ],
+        'Bases de datos': [ 'MySQL', 'Oracle SQL' ],
+        'Herramientas de desarrollo': [ 'VS Code', 'GitGub', 'Laragon', 'SoapUI', 'Jira' ],
+        'Otros': ['SCRUM', 'API Rest', 'Laravel DataTables', 'D3.js', 'jQuery', 'Ajax', 'Adobe Illustrator', 'Adobe Photoshop']
+    }
+
+    const SOFTSKILLS = [
+        {
+            name: 'Colaborativo',
+            description: `Me gusta trabajar en equipo porque nunca sabes qué puedes aprender de la persona que está a tu lado si la escuchas activamente, 
+                            del mismo modo que si me escuchan seguro que tengo algo que enseñar.`
+        },
+        {
+            name: 'Capacidad de adaptación',
+            description: `Estoy acostumbrado a los cambios constantes en mi entorno y mi trabajo, por lo que he desarrollado cierta facilidad para 
+                            ponerme al día con rapidez. `
+        },
+        {
+            name: 'Resolutivo',
+            description: `Mediante la documentación, investigación y autoformación trato de resolver por mi cuenta cualquier incidencia o imprevisto que se me presente, 
+                            aunque no se me caen los anillos para pedir ayuda si veo que la cosa se complica. No quiero que mi cabezonería me haga perder tiempo.`
+        },
+        {
+            name: 'Proactivo',
+            description: `Me esfuerzo por anticipar las necesidades del proyecto, identificando posibles problemas y errores futuros para prevenir que lleguen a ocurrir.`
+        },
+        {
+            name: 'Curioso',
+            description: `Me motiva buscar formas más creativas y eficientes de hacer las cosas, optimizando flujos y código siempre que me es posible.`
+        },
+        {
+            name: 'Organizado',
+            description: `Quiero que tanto mi trabajo como mi espacio para el mismo estén ordenados y bien organizados para ser lo más eficiente posible. 
+                            Es por ello que sigo prácticas Clean Code para mantener mi código limpio, ordenado y legible no sólo para mí mismo, sino para 
+                            los que deban trabajar con él después de mí.`
+        }
+    ]
+---
+
+<article>
+    <h2 class="text-xl font-semibold text-pink-500/90">Quién soy</h2><br>
+
+    <p class="indent-8">
+        Me llamo Pedro y empecé mi carrera como diseñador gráfico. Al no encontrar suficientes oportunidades en ese campo,
+        quise enfocarme al diseño web y descubrí mi pasión por la programación. <span class="text-yellow-500/90">Me especialicé en Desarrollo de Aplicaciones Web
+        enfocado a PHP con Laravel pero no me cierro a ninguna oportunidad de crecimiento que me permita dominar tanto lo que ya conozco
+        como nuevos lenguajes, tecnologías y frameworks a través de la experiencia laboral y la autoformación.</span>
+    </p><br>
+
+    <h2 class="text-xl font-semibold text-pink-500/90">Lo que sé</h2><br>
+
+    <div class="pl-8">
+        {
+            Object.entries(HARDSKILLS).map(([category, skills]) =>
+                <div class="mb-5">
+                    <h3 class="font-semibold text-yellow-500/90">{category}</h3>
+                    <p class="ml-8">
+                        {skills.join(' | ')}
+                    </p>
+               </div>
+            )
+        }        
+    </div>  
+
+    <h2 class="text-xl font-semibold text-pink-500/90">Cómo soy</h2><br>
+
+    <div class="pl-8">
+        {
+            SOFTSKILLS.map(({name, description}) => 
+                <div class="mb-5">
+                    <h3 class="font-semibold text-yellow-500/90">{name}</h3>
+                    <p class="ml-8">{description}</p>
+               </div>
+            )
+        }        
+    </div>      
+    
+</article>

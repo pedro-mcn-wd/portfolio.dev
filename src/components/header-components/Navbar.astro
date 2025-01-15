@@ -1,0 +1,102 @@
+--- 
+import ThemeToggle from "./ThemeToggle.astro"
+import BurguerMenu from ".././icons/BurguerMenu.astro"
+---
+<nav class="
+    relative
+    flex justify-center items-center
+    px-3
+    rounded-full
+    text-sm font-medium text-gray-600 dark:text-gray-200
+    bg-white/50 dark:bg-gray-800/90"
+    >
+  <ThemeToggle class="mx-1 pt-[.4rem] sm:pt-[.6rem]"/>
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-end mx-auto">
+    <button
+      id="collapsed-navbar-button"
+      data-collapse-toggle="collapsed-navbar-menu"
+      type="button"
+      class="inline-flex items-center size-8 justify-center text-sm text-gray-500 rounded-lg sm:hidden dark:text-gray-400"
+      aria-controls="collapsed-navbar-menu"
+      aria-expanded="false"
+    >
+      <span class="sr-only">Abrir menú</span>
+      <BurguerMenu class="size-[1.75rem] text-gray-800 dark:text-white " />
+    </button>
+    <div 
+      id="collapsed-navbar-menu" 
+      class="
+        hidden
+        absolute sm:relative top-full left-50 z-50 
+        sm:flex justify-end items-center 
+        w-36 sm:w-auto max-sm:mr-1.5 p-1
+        max-sm:rounded-md max-sm:border max-sm:border-gray-100 dark:max-sm:border-gray-500/20
+        max-sm:bg-white/90 dark:max-sm:bg-gray-900/90 max-sm:shadow-[0_3px_10px_rgb(0,0,0,0.2)] max-sm:backdrop-blur-md">
+      <slot />
+    </div>
+  </div>
+</nav>
+
+<style>
+  nav {
+    animation: nav-shadown 1s linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100px;
+  }
+
+  @keyframes nav-shadown {
+    0% {
+      @apply dark:bg-gray-800/0 bg-white/0;
+    }
+    to {
+      @apply shadow-lg ring-1 backdrop-blur ring-white/10;
+    }
+  }
+
+  #collapsed-navbar-menu:not(.hidden) {
+    display: inline;
+    animation: scale-up-center 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes scale-up-center {
+    from {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const collapsedNavbarButton = document.getElementById('collapsed-navbar-button');
+    const collapsedNavbarMenu = document.getElementById('collapsed-navbar-menu');
+
+    document.addEventListener('click', (event) => {
+      if ((!collapsedNavbarButton.contains(event.target) && !collapsedNavbarMenu.contains(event.target)) && !collapsedNavbarMenu.classList.contains('hidden')) {
+          collapsedNavbarMenu.classList.add('hidden')
+          collapsedNavbarButton.setAttribute('aria-expanded', 'false')      
+      }
+    });
+
+    collapsedNavbarButton.addEventListener('click', () => {
+      collapsedNavbarMenu.classList.toggle('hidden')
+      collapsedNavbarButton.setAttribute('aria-expanded', collapsedNavbarMenu.classList.contains('hidden') ? 'false' : 'true')    
+    });
+    
+    const desktopMediaQuery = window.matchMedia('(min-width: 640px)');
+
+    desktopMediaQuery.addEventListener('change', (event) => {
+        if (event.matches) {
+          collapsedNavbarMenu.classList.add('hidden')
+          collapsedNavbarButton.setAttribute('aria-expanded', 'false')   
+        }
+    })
+  })
+  
+</script>
+

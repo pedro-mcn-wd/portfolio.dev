@@ -1,0 +1,106 @@
+---
+import Navbar from "./Navbar.astro"
+
+const navItems = [
+  {
+    title: "Experiencia",
+    label: "experience",
+    url: "/#experience",
+  },
+  {
+    title: "Proyectos",
+    label: "projects",
+    url: "/#projects",
+  },
+  {
+    title: "Estudios",
+    label: "education",
+    url: "/#education",
+  },
+  {
+    title: "Sobre mí",
+    label: "aboutMe",
+    url: "/#aboutMe",
+  },
+  {
+    title: "Contacto",
+    label: "contact",
+    url: "/#",
+  },
+]
+---
+
+<header class="fixed top-0 z-10 flex justify-end sm:justify-center items-center w-full pe-3 mx-auto mt-3">
+  <Navbar>
+    {
+        navItems.map((link) => (
+        <a
+            class="relative text-start block px-2 py-1.5 max-sm:cursor-default max-sm:hover:bg-neutral-400/40 dark:max-sm:hover:bg-gray-500/50 rounded-sm"
+            aria-label={link.label}
+            href={link.url}
+        >
+            {link.title}
+        </a>
+        ))
+    }
+  </Navbar>
+</header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+   
+    const navItems = document.querySelectorAll("header nav a")
+    const sections = document.querySelectorAll("section > h2:first-of-type")
+
+    const callback = (entries: any[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          navItems.forEach((item) => {
+            if (item.getAttribute("aria-label") === entry.target.parentElement.id) {
+              item.classList.add("text-blue-500")
+            } else {
+              item.classList.remove("text-blue-500")
+            }
+          })
+        }
+      })
+    }
+
+    const observer = new IntersectionObserver(callback, {
+      root: null,
+      rootMargin: "0px",
+      threshold: 1,
+    })
+
+    sections.forEach((section) => {
+      observer.observe(section)
+    })
+
+    document.onvisibilitychange = () => {
+      if (document.visibilityState === "hidden") {
+        observer.disconnect()
+      } else {
+        sections.forEach((section) => {
+          observer.observe(section)
+        })
+      }
+    }
+  })
+</script>
+
+<style>
+  nav {
+    animation: nav-shadown 1s linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100px;
+  }
+
+  @keyframes nav-shadown {
+    0% {
+      @apply dark:bg-gray-800/0 bg-white/0;
+    }
+    to {
+      @apply shadow-lg ring-1 backdrop-blur ring-white/10;
+    }
+  }
+</style>

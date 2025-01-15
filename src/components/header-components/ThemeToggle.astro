@@ -1,0 +1,136 @@
+---
+import SunIcon from ".././icons/Sun.astro"
+import MoonIcon from ".././icons/Moon.astro"
+import SystemIcon from ".././icons/System.astro"
+
+const THEMES = [
+  {label: "Claro", mode: "light"}, 
+  {label: "Oscuro", mode: "dark"}, 
+  {label: "Auto", mode: "system"}
+]
+const { class: className } = Astro.props
+---
+
+<div class={`relative flex justify-end items-center self-start sm:self-start ${className}`}>
+  <button
+    transition:persist
+    id="theme-toggle-btn"
+    class="appearance-none border-none flex"
+  >
+    <span class="sr-only">Elige el tema</span>
+    <SunIcon id="light" class="theme-toggle-icon size-[1.32rem] sm:size-5" />
+    <MoonIcon
+      id="dark"
+      class="theme-toggle-icon absolute size-[1.32rem] sm:size-5"
+    />
+    <SystemIcon
+      id="system"
+      class="theme-toggle-icon absolute size-[1.32rem] sm:size-5"
+    />
+  </button>
+  <div
+    transition:persist
+    id="themes-menu"
+    class="
+      absolute hidden scale-80 top-8 right-0 text-sm p-1 mt-2 min-w-[8rem] 
+      rounded-md border border-gray-100 dark:border-gray-500/20
+      bg-white/90 dark:bg-gray-900/90 shadow-[0_3px_10px_rgb(0,0,0,0.2)] backdrop-blur-md"
+  >
+    <ul>
+      {
+        THEMES.map((theme) => (
+          <li data-mode={theme.mode} class="themes-menu-option px-2 py-1.5 cursor-default hover:bg-neutral-400/40 dark:hover:bg-gray-500/50 rounded-sm">
+            {theme.label}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<style>
+  #themes-menu.open {
+    display: inline;
+    animation: scale-up-center 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes scale-up-center {
+    from {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+</style>
+
+<script is:inline>
+  let remove = null
+  const matchMedia = window.matchMedia("(prefers-color-scheme: dark)")
+  const themesMenu = document.getElementById("themes-menu")
+
+  const getThemePreference = () => {
+    if (typeof localStorage !== "undefined") {
+      return localStorage.getItem("theme") ?? "system"
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light"
+  }
+
+  const updateIcon = (themePreference) => {
+    document.querySelectorAll(".theme-toggle-icon").forEach((element) => {
+      element.style.scale = element.id === themePreference ? "1" : "0"
+    })
+  }
+
+  const updateTheme = () => {
+    if (remove != null) {
+      remove()
+    }
+    matchMedia.addEventListener("change", updateTheme)
+    remove = () => {
+      matchMedia.removeEventListener("change", updateTheme)
+    }
+
+    const themePreference = getThemePreference()
+    const isDark =
+      themePreference === "dark" ||
+      (themePreference === "system" && matchMedia.matches)
+
+    updateIcon(themePreference)
+    document.documentElement.classList[isDark ? "add" : "remove"]("dark")
+  }
+
+  updateTheme()
+
+  document.addEventListener("click", () => themesMenu.classList.remove("open"))
+
+  document.getElementById("theme-toggle-btn").addEventListener("click", (e) => {
+    e.stopPropagation()
+    const isClosed = !themesMenu.classList.contains("open")
+    themesMenu.classList[isClosed ? "add" : "remove"]("open")
+    document.getElementById('collapsed-navbar-button')
+
+    const collapsedNavbarMenu = document.getElementById('collapsed-navbar-menu')
+    if (!collapsedNavbarMenu.classList.contains('hidden')) {
+      collapsedNavbarMenu.classList.add('hidden');
+    }
+  })
+
+  document.querySelectorAll(".themes-menu-option").forEach((element) => {
+    element.addEventListener("click", (e) => {
+      localStorage.setItem("theme", e.target.getAttribute('data-mode'))
+      updateTheme()
+    })
+  })
+
+  document.addEventListener('astro:after-swap', () => {
+    updateTheme();
+    window.scrollTo({ left: 0, top: 0, behavior: 'instant' });
+  })
+</script>

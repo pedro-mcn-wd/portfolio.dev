@@ -1,0 +1,25 @@
+---
+const { speed, text, class: className } = Astro.props
+---
+<span class=`typewriter ${className}` data-text={text} data-speed={speed}>
+    <span class="textSpan">
+    </span>
+    <span class="cursorSpan"></span>
+</span>
+
+  
+<style>
+	.cursorSpan {
+	  border-right: .15em solid orange;
+	}
+	
+	.blink {
+	  animation: blink-caret 1s step-end infinite;
+	}
+  
+	@keyframes blink-caret {
+	  from, to { border-color: transparent; }
+	  50% { border-color: orange; }
+	}
+</style>
+  

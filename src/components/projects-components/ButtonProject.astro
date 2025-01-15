@@ -1,0 +1,8 @@
+---
+    const { href, class: className } = Astro.props
+---
+<a href={href} target="_blank">
+    <button class={`flex items-center py-1 px-4 font-bold rounded-xl border ${className}`}>
+        <slot />
+    </button>
+</a>

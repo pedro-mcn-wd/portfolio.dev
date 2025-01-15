@@ -1,0 +1,144 @@
+---
+import ExperienceItem from "./ExperienceItem.astro"
+
+const EXPERIENCE = [
+    // Work experience
+    {
+        typeExperience: 'workExperience',
+        title: 'Desarrollador Web PHP',
+        companyOrCenter: '10Code Software Design',
+        date: 'Marzo 2023 / Julio 2024',
+        description: `
+                        Desarrollo de aplicaciones web centrado en backend con un stack basado en Laravel,
+                        JavaScript y MySQL principalmente. Realicé tareas de mantenimiento, resolución de
+                        incidencias, optimización de procesos, testing y nuevas implementaciones en proyectos en
+                        funcionamiento. Ocasionalmente trabajé en frontend, adquiriendo conocimientos básicos en
+                        frameworks como React y VueJS.
+                     `,
+        extraDescriptionArr: [
+            `
+                Mantuve buenas prácticas de desarrollo, incluyendo la escritura de código claro,
+                legible, sin duplicidades y bien estructurado. Mi trabajo se caracterizó por un código bien
+                comentado, facilitando así el entendimiento y mantenimiento por parte de otros
+                desarrolladores.
+            `,
+            `
+                Trabajé con metodología SCRUM, lo que me permitió desarrollar mi capacidad de trabajo en
+                equipo colaborando de manera eficiente en entornos ágiles y centrados en la mejora continua.
+            `
+        ] 
+    },
+    {
+        typeExperience: 'workExperience',
+        title: 'Diseñador gráfico',
+        companyOrCenter: 'Esdistinto',
+        date: 'Abril 2019 / Julio 2019',
+        description: `
+                        Diseño de merchandising y regalo corporativo, maquetación y cierre de artes finales y
+                        manipulación de producto. Uso de Adobe Photoshop y Adobe Illustrator principalmente.
+                     `           
+    },
+    {
+        typeExperience: 'workExperience',
+        title: 'Diseñador gráfico',
+        companyOrCenter: 'Texidó',
+        date: 'Agosto 2018 / Diciembre 2018',
+        description: `
+                        Encargado de la realización, traslación y adaptación del diseño del cliente a diversos soportes
+                        para su impresión en packaging. Uso de Adobe Photoshop y Adobe Illustrator principalmente.
+                     `
+    },
+    // Education
+    {
+        typeExperience: 'education',
+        title: 'CFGS Desarrollo de Aplicaciones Web',
+        companyOrCenter: 'IES Hermanos Machado',
+        date: 'Septiembre 2021 / Junio 2023',
+        description: `
+                        Aprendí a crear, implementar y mantener aplicaciones tanto del lado del cliente como del
+                        servidor. Me especialicé en tecnologías modernas como HTML, CSS, JavaScript y desarrollé
+                        nociones básicas en frameworks como Laravel y React. También adquirí habilidades en bases
+                        de datos y sistemas informáticos, y me formé en metodologías ágiles como SCRUM, todo ello
+                        para prepararme para el entorno laboral dinámico y colaborativo.
+                     `
+    },
+    {
+        typeExperience: 'education',
+        title: 'CdP Programación con lenguajes orientados a objetos y bases de datos relacionales',
+        companyOrCenter: 'IES Hermanos Machado',
+        date: 'Marzo 2022 / Noviembre 2022',
+        description: `
+                        Acreditación de competencias en el desarrollo de aplicaciones utilizando lenguajes de
+                        programación orientados a objetos y la gestión de bases de datos relacionales. Incluye
+                        formación en buenas prácticas de desarrollo, metodologías ágiles como SCRUM, y habilidades
+                        en tecnologías modernas como Java, C++, MySQL y SQL.
+                     `
+    },
+    {
+        typeExperience: 'education',
+        title: 'CFGS Diseño y Producción Editorial',
+        companyOrCenter: 'IES Llanes',
+        date: 'Octubre 2013 / Junio 2015',
+        description: `
+                        Aprendí a crear y gestionar productos gráficos, desde la conceptualización hasta la producción
+                        final, utilizando herramientas como Adobe Photoshop e Illustrator.
+                     `
+    },
+]
+
+const { typeExperience } = Astro.props
+---
+<ol class="relative ms-3.5 border-s-2 border-gray-200 dark:border-gray-700 opacity-90">        
+    {
+        EXPERIENCE.map(experience => 
+            typeExperience === experience.typeExperience && 
+            (
+                <li class="mb-10 ms-4">
+                    <ExperienceItem {...experience} />
+                </li>
+
+            )
+        )
+    }           
+</ol>
+
+<script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.showExtraDescriptionButton').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const container = e.target.parentElement.querySelector('.extraDescriptionContainer');
+                
+                document.querySelectorAll('.extraDescriptionContainer').forEach(otherContainer => {
+                    if (otherContainer !== container && !otherContainer.classList.contains('max-h-0')) {
+                        otherContainer.style.maxHeight = '0';
+                        otherContainer.classList.add('max-h-0');
+                        otherContainer.nextElementSibling.innerText = 'Ver más...';
+                    }
+                });
+
+                if (container.classList.contains('max-h-0')) {
+                    container.style.maxHeight = container.scrollHeight + 'px';
+                    container.classList.remove('max-h-0');
+                    button.innerText = 'Ver menos...';
+
+                    setTimeout(() => {
+                        const rect = container.getBoundingClientRect();
+                        const viewportHeight = window.innerHeight;
+
+                        if (rect.bottom > viewportHeight) {
+                            const scrollOffset = rect.bottom - viewportHeight;
+                            window.scrollBy({
+                                top: scrollOffset + 100,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }, 300);                    
+                } else {
+                    container.style.maxHeight = '0';
+                    container.classList.add('max-h-0');
+                    button.innerText = 'Ver más...';
+                }
+            });
+        });
+    });     
+</script>
